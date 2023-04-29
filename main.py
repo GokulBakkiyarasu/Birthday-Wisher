@@ -3,6 +3,7 @@ from datetime import *
 from random import *
 from smtplib import *
 from tkinter import *
+
 # 1. Update the birthdays.csv
 info_dict = {"name": ["Gokulakrishnan", "Thirumalairaaj", "Bala", "Kavin", "Mani"],
              "email": ["example1@gmail.com", "example2@gmail.com",
@@ -10,7 +11,7 @@ info_dict = {"name": ["Gokulakrishnan", "Thirumalairaaj", "Bala", "Kavin", "Mani
              "year": [2003, 2003, 2002, 2002, 2002],
              "month": [5, 5, 11, 3, 4],
              "day": [4, 24, 9, 31, 28]
-            }
+             }
 df = DataFrame.from_dict(info_dict)
 df.to_csv("birthdays.csv", index=False)
 # 2. Check if today matches a birthday in the birthdays.csv
@@ -41,17 +42,21 @@ else:
             letter_sent += sentence
             letter.close()
 
-        # 4. Send the letter generated in step 3 to that person's email address.
-        def generator():
-            global letter_sent, receiver_email
-            sender_email = "summamail0001@gmail.com"
-            passkey = "mbyiydgqkujzppkq"
-            with SMTP("smtp.gmail.com") as connection:
-                connection.starttls()
-                connection.login(user=sender_email, password=passkey)
-                connection.sendmail(from_addr=sender_email,
-                                    to_addrs=receiver_email,
-                                    msg=f"Subject:Birthday wishes\n\n{letter_sent}")
+
+# 4. Send the letter generated in step 3 to that person's email address.
+def generator():
+    global letter_sent, receiver_email
+    sender_email = "summamail0001@gmail.com"
+    passkey = "mbyiydgqkujzppkq"
+    with SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(user=sender_email, password=passkey)
+        try:
+            connection.sendmail(from_addr=sender_email,
+                                to_addrs=receiver_email,
+                                msg=f"Subject:Birthday wishes\n\n{letter_sent}")
+        except NameError:
+            pass
 
 
 # --------------------UI-----------------------------
